@@ -46,14 +46,13 @@ class User extends Authenticatable implements JWTSubject
             'password' => 'hashed',
         ];
     }
+
+    
     public function getJWTIdentifier()
     {
         return $this->getKey();
     }
 
-    /**
-     * Mendapatkan properti tambahan untuk payload JWT
-     */
     public function getJWTCustomClaims()
     {
         return [];
