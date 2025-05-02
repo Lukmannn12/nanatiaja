@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\PertandinganController;
 use App\Http\Controllers\TanggalController;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::resource('pertandingan', PertandinganController::class);
+Route::resource('jadwal', JadwalController::class);
 route::get('/countpertandingan', [PertandinganController::class, 'countPertandingan']);
 
 Route::post('register', [AuthController::class, 'register']);

@@ -54,21 +54,6 @@ export default function DataPertandinganPage() {
       });
   }, []);
 
-  // delete data
-  const handleDelete = async (id:number) => {
-    const confirmDelete = confirm("Apakah kamu yakin ingin menghapus data ini?");
-    if (!confirmDelete) return;
-
-    try { 
-      await axios.delete(`http://127.0.0.1:8000/api/pertandingan/${id}`)
-      alert('produk berhasil di hapus!');
-      window.location.reload();
-    } catch (error) {
-      console.error("gagal menghapus produk:", error);
-      alert("terjadi kesalan saat menghapus produk")
-    }
-  };
-
 
 
   return (

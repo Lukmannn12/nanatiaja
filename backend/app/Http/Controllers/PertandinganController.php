@@ -16,7 +16,7 @@ class PertandinganController extends Controller
         return response()->json([
             'message' => 'Data pertandingan berhasil diambil',
             'data' => $pertandingan
-        ]);
+        ], 200);
     }
 
     public function countPertandingan() {
