@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -47,28 +48,40 @@ class AuthController extends Controller
         ], 201);
     }
 
-    
+
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        // Validasi input awal
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
 
-        if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Invalid credentials'], 401);
+        if ($validator->fails()) {
+            return response()->json(['error' => 'Invalid input', 'messages' => $validator->errors()], 422);
         }
 
-        $user = JWTAuth::user();
+        $credentials = $request->only('email', 'password');
 
-        $role = $user->role;
-        $name = $user->name;  // Ambil nama pengguna
-        $email = $user->email;  // Ambil email pengguna
+        $user = User::where('email', $credentials['email'])->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'Email Tidak Terdaftar'], 401);
+        }
+
+        if (!Hash::check($credentials['password'], $user->password)) {
+            return response()->json(['error' => 'Password Tidak Sesuai'], 401);
+        }
+
+        if (!$token = JWTAuth::attempt($credentials)) {
+            return response()->json(['error' => 'Failed to generate token'], 500);
+        }
 
         return response()->json([
             'token' => $token,
-            'role' => $role,
-            'name' => $name,
-            'email' => $email,
-            // tambahkan role ke dalam response
-
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
         ]);
     }
 
@@ -85,7 +98,7 @@ class AuthController extends Controller
         }
     }
 
-    
+
     public function getAllUsers(Request $request)
     {
 
@@ -93,6 +106,4 @@ class AuthController extends Controller
         $users = User::all();
         return response()->json($users);
     }
-
-
 }

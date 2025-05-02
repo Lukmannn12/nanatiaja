@@ -120,3 +120,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+div[data-next-badge="true"] {
+  display: none !important;
+}

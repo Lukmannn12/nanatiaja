@@ -1,3 +1,5 @@
+"use client"
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -9,11 +11,62 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+
+    const router = useRouter();
+
+    const[email, setEmail] = useState("");
+    const[password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
+
+    const HandleLogin = async (e: React.FormEvent) => {
+      e.preventDefault();
+
+      try {
+        const res = await fetch("http://localhost:8000/api/login", {
+          method: "POST",
+          headers: {
+            "Content-type" : "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("name", data.name);
+          localStorage.setItem("email", data.email)
+          const userRole = data.role;
+
+          if (userRole == "admin") {
+              router.push("/dashboard");
+          } else {
+            router.push("/");
+          }
+          
+          setMessage("login berhasil");
+        } else {
+          setMessage(data.error || "login gagal");
+        }
+      } catch (error) {
+        console.error("login error:", error);
+        setMessage("terjadi kesalahan. Coba Lagi")
+      }
+    };
+
+
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -24,7 +77,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={HandleLogin}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-3">
                 <Label htmlFor="email">Email</Label>
@@ -33,6 +86,8 @@ export function LoginForm({
                   type="email"
                   placeholder="m@example.com"
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="grid gap-3">
@@ -45,7 +100,8 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" type="password" required    value={password}
+                  onChange={(e) => setPassword(e.target.value)} />
               </div>
               <div className="flex flex-col gap-3">
                 <Button type="submit" className="w-full">
@@ -58,7 +114,7 @@ export function LoginForm({
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
-              <a href="#" className="underline underline-offset-4">
+              <a href="/register" className="underline underline-offset-4">
                 Sign up
               </a>
             </div>
