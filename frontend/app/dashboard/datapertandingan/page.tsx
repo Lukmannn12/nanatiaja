@@ -13,6 +13,10 @@ import {
 import { useEffect, useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import axios from "axios";
+import CreatePertandingan from "./create/page";
+import EditPertandinganPage from "./update/page";
+import ShowPertandinganPage from "./show/page";
+import DeletePertandinganPage from "./delete/page";
 
 type Pertandingan = {
   id: number
@@ -69,6 +73,7 @@ export default function DataPertandinganPage() {
 
   return (
     <div className="px-2 xl:px-10 py-5">  
+        <CreatePertandingan/>
       <Table className="shadow-lg" >
         <TableCaption>List of your recent matches.</TableCaption>
         <TableHeader>
@@ -93,22 +98,9 @@ export default function DataPertandinganPage() {
                   Rp {pertandingan.harga.toLocaleString()}
                 </TableCell>
                 <TableCell className="text-center space-x-3">
-                <Button
-                      variant="destructive"
-                       className="cursor-pointer"
-                      onClick={() => handleDelete(pertandingan.id)}
-                    >
-                        <FaRegTrashAlt className="w-4 h-4" />
-                      Delete
-                    </Button>
-                <Button
-                      variant="destructive"
-                       className="cursor-pointer"
-                      onClick={() => handleDelete(pertandingan.id)}
-                    >
-                        <FaRegTrashAlt className="w-2 h-2" />
-                      Delete
-                    </Button>
+                  <ShowPertandinganPage pertandinganData={pertandingan}/>
+                  <EditPertandinganPage pertandinganData={pertandingan}/>
+                  <DeletePertandinganPage pertandinganData={pertandingan} />
                 </TableCell>
               </TableRow>
             ))

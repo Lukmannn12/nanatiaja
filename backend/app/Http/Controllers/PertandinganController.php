@@ -19,6 +19,16 @@ class PertandinganController extends Controller
         ]);
     }
 
+    public function countPertandingan() {
+
+        $total = Pertandingan::count();
+
+        return response() -> json([
+            'meesage' => "total pertandingan",
+            "total" => $total
+        ], 200);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -52,7 +62,10 @@ class PertandinganController extends Controller
      */
     public function show(Pertandingan $pertandingan)
     {
-        //
+        return response()->json([
+            'message' => 'Data pertandingan berhasil diambil',
+            'data' => $pertandingan,
+        ], 200);
     }
 
     /**
@@ -68,7 +81,17 @@ class PertandinganController extends Controller
      */
     public function update(Request $request, Pertandingan $pertandingan)
     {
-        //
+        
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'hari' => 'required|string|max:255',
+            'tanggal' => 'required|date',
+            'harga' => 'required|integer',
+        ]);
+
+        $pertandingan->update($validated);
+
+        return response()->json($pertandingan, 200);
     }
 
     /**

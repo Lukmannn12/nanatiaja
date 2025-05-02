@@ -11,6 +11,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::resource('pertandingan', PertandinganController::class);
+route::get('/countpertandingan', [PertandinganController::class, 'countPertandingan']);
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
