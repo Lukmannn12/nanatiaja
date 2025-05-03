@@ -3,7 +3,6 @@ import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -13,19 +12,11 @@ import React, { useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
 
 
-export default function EditPertandinganPage({ pertandinganData }: any) {
+export default function ShowPertandinganPage({ pertandinganData }: any) {
 
-    const [pertandingan, setPertandingan] = useState(pertandinganData)
+    const [pertandingan] = useState(pertandinganData)
 
     useEffect(() => { console.log(pertandingan) }, [pertandingan])
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target
-        setPertandingan((prev: any) => ({
-            ...prev,
-            [name]: value
-        }))
-    }
 
 
     return (

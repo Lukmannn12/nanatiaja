@@ -14,6 +14,8 @@ import { useEffect, useState } from "react";
 import CreateJadwalPage from "./create/page";
 import EditJadwalPage from "./update/page";
 import DeleteJadwalPage from "./delete/page";
+import ShowJadwalPage from "./show/page";
+
 
 type Jadwal = {
     id: number;
@@ -89,6 +91,7 @@ export default function DataJadwalPage() {
                                 <TableCell>{jadwal.pertandingan.hari}</TableCell>
                                 <TableCell>Rp {jadwal.pertandingan.harga.toLocaleString()}</TableCell>
                                 <TableCell className="text-center space-x-3">  
+                                    <ShowJadwalPage jadwalData={jadwal}/>
                                     <EditJadwalPage jadwalData={jadwal}/>
                                      <DeleteJadwalPage jadwalData={jadwal} />
                                     </TableCell>

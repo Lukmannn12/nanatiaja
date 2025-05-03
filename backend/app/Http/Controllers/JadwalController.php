@@ -61,7 +61,12 @@ class JadwalController extends Controller
      */
     public function show(Jadwal $jadwal)
     {
-        //
+        $jadwal = Jadwal::with('pertandingan')->get();
+
+    return response()->json([
+        'message' => 'data berhasil diambil',
+        'data' => $jadwal
+    ]);
     }
 
     /**
