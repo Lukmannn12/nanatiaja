@@ -17,6 +17,24 @@ import axios from "axios";
 export function SectionCards() {
 
   const [totalPertandingan, setTotalPertandingan] = useState<number | null>(null);
+  const [totalJadwal, setTotalJadwal] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchTotalJadwal = async () => {
+      try {
+        const res = await axios.get("http://localhost:8000/api/countjadwal", {
+          headers: {
+            Accept: "application/json",
+          },
+        })
+        setTotalJadwal(res.data.total)
+      } catch (error) {
+        console.error("gagal mengambil total pertandingan:", error)
+      }
+    }
+
+    fetchTotalJadwal()
+}, [])
 
   useEffect(() => {
       const fetchTotalPertandingan = async () => {
@@ -43,6 +61,14 @@ export function SectionCards() {
           <CardDescription>Total Pertandingan</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
            {totalPertandingan}
+          </CardTitle>
+        </CardHeader>
+      </Card>
+      <Card className="@container/card">
+        <CardHeader>
+          <CardDescription>Total Jadwal</CardDescription>
+          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+           {totalJadwal}
           </CardTitle>
         </CardHeader>
       </Card>

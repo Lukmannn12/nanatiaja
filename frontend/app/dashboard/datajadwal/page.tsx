@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/table"
 import { useEffect, useState } from "react";
 import CreateJadwalPage from "./create/page";
+import EditJadwalPage from "./update/page";
+import DeleteJadwalPage from "./delete/page";
 
 type Jadwal = {
     id: number;
@@ -79,14 +81,17 @@ export default function DataJadwalPage() {
 
                 <TableBody>
                     {jadwal.length > 0 ? (
-                        jadwal.map((item, index) => (
-                            <TableRow key={item.id} className="text-center">
+                        jadwal.map((jadwal, index) => (
+                            <TableRow key={jadwal.id} className="text-center">
                                 <TableCell>{index + 1}</TableCell>
-                                <TableCell>{item.nama_pertandingan}</TableCell>
-                                <TableCell>{item.waktu}</TableCell>
-                                <TableCell>{item.pertandingan.hari}</TableCell>
-                                <TableCell>Rp {item.pertandingan.harga.toLocaleString()}</TableCell>
-                                {/* aksi tombol */}
+                                <TableCell>{jadwal.nama_pertandingan}</TableCell>
+                                <TableCell>{jadwal.waktu}</TableCell>
+                                <TableCell>{jadwal.pertandingan.hari}</TableCell>
+                                <TableCell>Rp {jadwal.pertandingan.harga.toLocaleString()}</TableCell>
+                                <TableCell className="text-center space-x-3">  
+                                    <EditJadwalPage jadwalData={jadwal}/>
+                                     <DeleteJadwalPage jadwalData={jadwal} />
+                                    </TableCell>
                             </TableRow>
                         ))
                     ) : (

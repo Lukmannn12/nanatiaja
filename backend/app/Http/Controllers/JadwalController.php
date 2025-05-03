@@ -19,7 +19,16 @@ class JadwalController extends Controller
             'data' => $jadwal
         ], 200);
     }
+    
+    public function countJadwal() {
 
+        $total = Jadwal::count();
+
+        return response() -> json([
+            'meesage' => "total jadwal",
+            "total" => $total
+        ], 200);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -68,7 +77,18 @@ class JadwalController extends Controller
      */
     public function update(Request $request, Jadwal $jadwal)
     {
-        //
+        $validated = $request->validate([
+            'pertandingan_id' => 'required|exists:pertandingans,id',
+            'waktu' => 'required|string|max:255',
+            'nama_pertandingan' => 'required|string|max:255',
+        ]);
+    
+        $jadwal->update($validated);
+    
+        return response()->json([
+            'message' => 'data berhasil di update',
+            'data' => $jadwal
+        ], 200);
     }
 
     /**
@@ -76,6 +96,10 @@ class JadwalController extends Controller
      */
     public function destroy(Jadwal $jadwal)
     {
-        //
+        $jadwal->delete();
+
+        return response()->json([
+            'message' => "produk berhasil di hapus",
+        ], 200);
     }
 }

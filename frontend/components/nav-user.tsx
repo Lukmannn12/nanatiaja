@@ -55,6 +55,7 @@ export function NavUser({
         localStorage.removeItem("token");
         localStorage.removeItem("name");
         localStorage.removeItem("email");
+
         router.push("/login");
       } else {
         console.error("logout gagal");
