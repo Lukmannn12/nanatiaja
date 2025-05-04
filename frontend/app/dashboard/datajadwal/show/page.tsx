@@ -22,7 +22,7 @@ export default function ShowJadwalPage({ jadwalData }: any) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="outline">
+          <Button className="cursor-pointer" variant="outline">
             <FaEye className="w-4 h-4" />
           </Button>
         </DialogTrigger>

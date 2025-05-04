@@ -22,7 +22,7 @@ export default function ShowPertandinganPage({ pertandinganData }: any) {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="secondary">
+                <Button variant="secondary" className="cursor-pointer">
                     <FaEye className="w-1 h-1"/>
                 </Button>
             </DialogTrigger>

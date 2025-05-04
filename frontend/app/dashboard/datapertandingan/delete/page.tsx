@@ -18,7 +18,7 @@ export default function DeletePertandinganPage({ pertandinganData }: { pertandin
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="destructive">
+        <Button variant="destructive" className="cursor-pointer">
         <Trash2 className="w-1 h-1" />
         </Button>   
       </DialogTrigger>

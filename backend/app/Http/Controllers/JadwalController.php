@@ -19,15 +19,32 @@ class JadwalController extends Controller
             'data' => $jadwal
         ], 200);
     }
-    
-    public function countJadwal() {
+
+    public function countJadwal()
+    {
 
         $total = Jadwal::count();
 
-        return response() -> json([
+        return response()->json([
             'meesage' => "total jadwal",
             "total" => $total
         ], 200);
+    }
+
+    public function getByHari(Request $request)
+    {
+        $hari = $request->query('hari');
+
+        $jadwals = Jadwal::with('pertandingan')
+            ->whereHas('pertandingan', function ($query) use ($hari) {
+                $query->where('hari', $hari);
+            })
+            ->get();
+
+        return response()->json([
+            'hari' => $hari,
+            'jadwals' => $jadwals,
+        ]);
     }
     /**
      * Show the form for creating a new resource.
@@ -47,7 +64,7 @@ class JadwalController extends Controller
             'waktu' => 'required|string|max:255',
             'nama_pertandingan' => 'required|string|max:255',
         ]);
-    
+
         $jadwal = Jadwal::create($validated);
 
         return response()->json([
@@ -63,10 +80,10 @@ class JadwalController extends Controller
     {
         $jadwal = Jadwal::with('pertandingan')->get();
 
-    return response()->json([
-        'message' => 'data berhasil diambil',
-        'data' => $jadwal
-    ]);
+        return response()->json([
+            'message' => 'data berhasil diambil',
+            'data' => $jadwal
+        ]);
     }
 
     /**
@@ -87,9 +104,9 @@ class JadwalController extends Controller
             'waktu' => 'required|string|max:255',
             'nama_pertandingan' => 'required|string|max:255',
         ]);
-    
+
         $jadwal->update($validated);
-    
+
         return response()->json([
             'message' => 'data berhasil di update',
             'data' => $jadwal

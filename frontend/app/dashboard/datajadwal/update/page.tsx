@@ -72,7 +72,7 @@ export default function EditJadwalPage({ jadwalData }: any) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline">
+                <Button variant="outline" className="cursor-pointer">
                     <Pencil className="w-1 h-1" />
                 </Button>
             </DialogTrigger>

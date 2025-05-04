@@ -53,7 +53,7 @@ export default function EditPertandinganPage({ pertandinganData }: any) {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="outline">
+                <Button variant="outline" className="cursor-pointer">
                 <Pencil className="w-1 h-1" />
                 </Button>
             </DialogTrigger>

@@ -18,7 +18,7 @@ export default function DeleteJadwalPage({ jadwalData }: { jadwalData: any }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="destructive">
+        <Button variant="destructive" className="cursor-pointer">
         <Trash2 className="w-1 h-1" />
         </Button>   
       </DialogTrigger>
