@@ -7,7 +7,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 
 
 export default function ShowDetailPage({ hari }: { hari: string }) {

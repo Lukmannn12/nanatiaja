@@ -11,64 +11,92 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useEffect, useState } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
 
-    const router = useRouter();
+  const router = useRouter();
+  const [showAlert, setShowAlert] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const searchParams = useSearchParams()
 
-    const[email, setEmail] = useState("");
-    const[password, setPassword] = useState("");
-    const [message, setMessage] = useState("");
+  const HandleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-    const HandleLogin = async (e: React.FormEvent) => {
-      e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:8000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
-      try {
-        const res = await fetch("http://localhost:8000/api/login", {
-          method: "POST",
-          headers: {
-            "Content-type" : "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        });
+      const data = await res.json();
 
-        const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("name", data.name);
+        localStorage.setItem("email", data.email)
+        const userRole = data.role;
 
-        if (res.ok) {
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("name", data.name);
-          localStorage.setItem("email", data.email)
-          const userRole = data.role;
-
-          if (userRole == "admin") {
-              router.push("/dashboard");
-          } else {
-            router.push("/");
-          }
-          
-          setMessage("login berhasil");
+        if (userRole == "admin") {
+          router.push("/dashboard");
         } else {
-          setMessage(data.error || "login gagal");
+          router.push("/?login=success");
         }
-      } catch (error) {
-        console.error("login error:", error);
-        setMessage("terjadi kesalahan. Coba Lagi")
-      }
-    };
 
+        setMessage("login berhasil");
+      } else {
+        setMessage(data.error || "login gagal");
+      }
+    } catch (error) {
+      console.error("login error:", error);
+      setMessage("terjadi kesalahan. Coba Lagi")
+    }
+  };
+
+  useEffect(() => {
+    const success = searchParams.get("success")
+    if (success === "true") {
+      setShowAlert(true)
+    }
+  }, [searchParams])
 
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
+      {/* Tampilkan alert jika berhasil registrasi */}
+      {showAlert && (
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 w-full max-w-md z-50">
+          <Alert variant="destructive" className="shadow-lg">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Registrasi Berhasil</AlertTitle>
+            <AlertDescription>
+              Akun Anda telah berhasil dibuat. Silakan login.
+            </AlertDescription>
+            <button
+              onClick={() => setShowAlert(false)}
+              className="absolute top-2 right-2 text-red-500 hover:text-red-700 cursor-pointer p-2"
+            >
+              ✕
+            </button>
+          </Alert>
+        </div>
+      )}
+
       <Card>
         <CardHeader>
           <CardTitle>Login to your account</CardTitle>
@@ -100,7 +128,7 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required    value={password}
+                <Input id="password" type="password" required value={password}
                   onChange={(e) => setPassword(e.target.value)} />
               </div>
               <div className="flex flex-col gap-3">

@@ -12,11 +12,13 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 export function RegisterForm({
     className,
     ...props
 }: React.ComponentProps<"div">) {
+    const router = useRouter();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -43,9 +45,10 @@ export function RegisterForm({
                 setName("");
                 setEmail("");
                 setPassword("");
+                router.push('/login?success=true');
             } else {
                 setErrors(data.error || {});
-            }
+            } 
         } catch (error) {
             console.error("Error:", error);
         }
