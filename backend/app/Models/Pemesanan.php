@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Jadwal extends Model
+class Pemesanan extends Model
 {
     use HasFactory;
-    protected $fillable = ['nama_pertandingan','waktu','pertandingan_id'];
+    protected $fillable = ['nama','email','pertandingan_id','status'];
 
     public function pertandingan(): BelongsTo
     {

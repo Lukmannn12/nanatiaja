@@ -51,22 +51,26 @@ export default function EditJadwalPage({ jadwalData }: any) {
     };
 
     // Handle form submission
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        axios
-            .put(`http://127.0.0.1:8000/api/jadwal/${jadwal.id}`, jadwal, {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
-            .then(() => {
-                alert("Jadwal berhasil diupdate!");
-                setOpen(false);
-                window.location.reload();
-            })
-            .catch((error) => {
-                console.error("Gagal update", error);
-            });
+        try {
+            const res = await axios.put(
+                `http://127.0.0.1:8000/api/jadwal/${jadwal.id}`,
+                jadwal,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+    
+            console.log("Data yang berhasil diupdate dari backend:", res.data.data);
+            alert("Jadwal berhasil diupdate!");
+            setOpen(false);
+            window.location.reload();
+        } catch (error) {
+            console.error("Gagal update:", error);
+        }
     };
 
     return (

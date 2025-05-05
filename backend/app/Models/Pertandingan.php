@@ -13,7 +13,7 @@ class Pertandingan extends Model
 
     public function pertandingans(): HasMany 
     {
-        return $this->hasMany(jadwal::class);
+        return $this->hasMany(Jadwal::class);
     }
 }
 

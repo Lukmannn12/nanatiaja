@@ -6,10 +6,21 @@ import axios from "axios";
 import { CalendarCheck, CreditCard, Ticket } from "lucide-react";
 import { useEffect, useState } from "react";
 
+interface Pertandingan {
+    id: number;
+    name: string;
+    hari: string;
+  }
+
 
 export default function FormPemesananPage() {
+    const [nama, setNama] = useState("");
+    const [email, setEmail] = useState("");
+    const [noHp, setNoHp] = useState("");
+    const [jumlahTiket, setJumlahTiket] = useState("");
+    const [status, setStatus] = useState("belum bayar");
     const [pertandinganId, setPertandinganId] = useState("");
-    const [pertandingans, setPertandingans] = useState([]);
+    const [pertandingans, setPertandingans] = useState<Pertandingan[]>([])
 
     useEffect(() => {
         axios.get("http://localhost:8000/api/pertandingan")
@@ -17,6 +28,44 @@ export default function FormPemesananPage() {
             .catch(err => console.error("Gagal fetch pertandingan", err));
     }, []);
 
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+    
+        const formData = {
+            nama,
+            email,
+            no_hp: noHp,
+            jumlah_tiket: jumlahTiket,
+            status,
+            pertandingan_id: parseInt(pertandinganId),
+        };
+    
+        console.log("Data yang dikirim:", formData);
+    
+        try {
+            const token = localStorage.getItem("token"); // Ambil token dari localStorage
+            const response = await axios.post(
+              "http://127.0.0.1:8000/api/formpemesanan",
+              formData,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+    
+          if (response.status === 201) {
+            alert("form berhasil dibuat!");
+            window.location.reload();
+          } else {
+            throw new Error("Gagal membuat jadwal");
+          }
+        } catch (error) {
+          console.error("Error saat submit:", error);
+        }
+      };
+    
     return (
         <div>
             <NavbarUserPage />
@@ -57,7 +106,7 @@ export default function FormPemesananPage() {
                         <p className="font-light text-base text-white text-center mb-8">
                             Pesan tiket futsal dengan mudah! Pilih pertandingan, tentukan tempat duduk, dan bayar dengan aman
                         </p>
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                 <div>
                                     <label htmlFor="nama" className="block text-white text-sm font-medium mb-1">Nama</label>
@@ -67,6 +116,8 @@ export default function FormPemesananPage() {
                                         name="nama"
                                         className="w-full h-10 px-4 border text-sm text-white border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                                         placeholder="Masukkan Nama"
+                                        value={nama}
+                                        onChange={(e) => setNama(e.target.value)}
                                         required
                                     />
                                 </div>
@@ -78,6 +129,8 @@ export default function FormPemesananPage() {
                                         name="email"
                                         className="w-full h-10 px-4 border text-sm text-white border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                                         placeholder="Masukkan Email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         required
                                     />
                                 </div>
@@ -89,6 +142,8 @@ export default function FormPemesananPage() {
                                         name="no_hp"
                                         className="w-full h-10 px-4 border text-sm text-white border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
                                         placeholder="Masukkan Nomor HP"
+                                        value={noHp}
+                                        onChange={(e) => setNoHp(e.target.value)}
                                         required
                                     />
                                 </div>
@@ -101,6 +156,8 @@ export default function FormPemesananPage() {
                                         min="1"
                                         className="w-full h-10 px-4 border text-sm text-white border-gray-300 rounded-md shadow-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-blue-400"
                                         placeholder="Masukkan Jumlah Tiket"
+                                        value={jumlahTiket}
+                                        onChange={(e) => setJumlahTiket(e.target.value)}
                                         required
                                     />
                                 </div>
@@ -117,14 +174,13 @@ export default function FormPemesananPage() {
                                         required
                                     >
                                         <option value="">-- Pilih Pertandingan --</option>
-                                        {pertandingans.map((p: any) => (
+                                        {pertandingans.map((p) => (
                                             <option key={p.id} value={p.id}>
                                                 {p.name} - {p.hari}
                                             </option>
                                         ))}
                                     </select>
                                 </div>
-
                             </div>
                             <div className="flex justify-center mt-8">
                                 <button type="submit" className="bg-[#FF723B] px-12 py-2 rounded-full text-white font-semibold hover:bg-orange-500 transition">
