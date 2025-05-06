@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pemesanan;
+use App\Models\Pertandingan;
 use Illuminate\Http\Request;
 
 class PemesananController extends Controller
@@ -38,9 +39,18 @@ class PemesananController extends Controller
             'nama' => 'required|string|max:255',
             'email' => 'required|email',
             'status' => 'required|in:paid,unpaid',
+            'no_hp' => 'required|string|max:20',
+            'jumlah_tiket' => 'required|integer|min:1',
         ]);
 
-        $pemesanan = Pemesanan::create($validated);
+        $pertandingan = Pertandingan::findOrFail($request->pertandingan_id);
+        $total = $pertandingan->harga * $request->jumlah_tiket;
+
+        $pemesanan = Pemesanan::create([
+            ...$validated,
+            'total' => $total,
+        ]);
+        
 
         return response()->json([
             'message' => 'data berhasil di buat',

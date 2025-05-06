@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('email');
+            $table->string('no_hp');
+            $table->integer('jumlah_tiket');
+            $table->decimal('total', 8, 2);
             $table->foreignId('pertandingan_id')->constrained('pertandingans')->cascadeOnDelete();
             $table->enum('status', ['paid', 'unpaid'])->default('unpaid');
             $table->timestamps();

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Pemesanan extends Model
 {
     use HasFactory;
-    protected $fillable = ['nama','email','pertandingan_id','status'];
+    protected $fillable = ['nama','email','pertandingan_id','status','no_hp','jumlah_tiket','total'];
 
     public function pertandingan(): BelongsTo
     {

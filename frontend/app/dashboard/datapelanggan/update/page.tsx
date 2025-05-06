@@ -63,9 +63,8 @@ export default function EditDatapelangganPage({ pelangganData }: any) {
           );
 
         console.log("Data yang berhasil diupdate dari backend:", res.data.data);
-        alert("Status berhasil diupdate!");
         setOpen(false);
-        window.location.reload();
+        window.location.href = "/dashboard/datapelanggan?update=success";
     } catch (error) {
         console.error("Gagal update:");
     }

@@ -18,7 +18,7 @@ export default function FormPemesananPage() {
     const [email, setEmail] = useState("");
     const [noHp, setNoHp] = useState("");
     const [jumlahTiket, setJumlahTiket] = useState("");
-    const [status, setStatus] = useState("belum bayar");
+    const [status, setStatus] = useState("unpaid");
     const [pertandinganId, setPertandinganId] = useState("");
     const [pertandingans, setPertandingans] = useState<Pertandingan[]>([])
 
@@ -35,7 +35,7 @@ export default function FormPemesananPage() {
             nama,
             email,
             no_hp: noHp,
-            jumlah_tiket: jumlahTiket,
+            jumlah_tiket: parseInt(jumlahTiket), 
             status,
             pertandingan_id: parseInt(pertandinganId),
         };
@@ -43,14 +43,12 @@ export default function FormPemesananPage() {
         console.log("Data yang dikirim:", formData);
     
         try {
-            const token = localStorage.getItem("token"); // Ambil token dari localStorage
             const response = await axios.post(
-              "http://127.0.0.1:8000/api/formpemesanan",
+              "http://127.0.0.1:8000/api/pemesanan",
               formData,
               {
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
                 },
               }
             );
