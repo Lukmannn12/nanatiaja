@@ -53,7 +53,7 @@ export function NavbarUserPage() {
   }
 
   const handleNavClick = (item: any) => {
-    if (item.name === "Tiket") {
+    if (item.name === "Tiket", "History") {
       const token = localStorage.getItem("token");
       if (!token) {
         setShowAlert(true);

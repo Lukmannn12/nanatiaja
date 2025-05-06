@@ -1,7 +1,6 @@
 "use client"
 
 import { NavbarUserPage } from "@/components/navbar";
-import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { CalendarCheck, CreditCard, Ticket } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -21,6 +20,7 @@ export default function FormPemesananPage() {
     const [status, setStatus] = useState("unpaid");
     const [pertandinganId, setPertandinganId] = useState("");
     const [pertandingans, setPertandingans] = useState<Pertandingan[]>([])
+
 
     useEffect(() => {
         axios.get("http://localhost:8000/api/pertandingan")
@@ -43,12 +43,14 @@ export default function FormPemesananPage() {
         console.log("Data yang dikirim:", formData);
     
         try {
+            const token = localStorage.getItem("token");
             const response = await axios.post(
               "http://127.0.0.1:8000/api/pemesanan",
               formData,
               {
                 headers: {
                   "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`, 
                 },
               }
             );

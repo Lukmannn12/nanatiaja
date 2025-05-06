@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('total', 8, 2);
             $table->foreignId('pertandingan_id')->constrained('pertandingans')->cascadeOnDelete();
             $table->enum('status', ['paid', 'unpaid'])->default('unpaid');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }

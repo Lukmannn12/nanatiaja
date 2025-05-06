@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pemesanan;
 use App\Models\Pertandingan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PemesananController extends Controller
 {
@@ -33,7 +34,7 @@ class PemesananController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $validated = $request->validate([
             'pertandingan_id' => 'required|exists:pertandingans,id',
             'nama' => 'required|string|max:255',
@@ -49,8 +50,9 @@ class PemesananController extends Controller
         $pemesanan = Pemesanan::create([
             ...$validated,
             'total' => $total,
+            'user_id' => Auth::id(),
         ]);
-        
+
 
         return response()->json([
             'message' => 'data berhasil di buat',
@@ -82,11 +84,11 @@ class PemesananController extends Controller
         $validated = $request->validate([
             'status' => 'required|in:paid,unpaid',
         ]);
-    
+
         $pemesanan->update([
             'status' => $validated['status'],
         ]);
-    
+
         return response()->json([
             'message' => 'Status berhasil diperbarui',
             'data' => $pemesanan
@@ -99,5 +101,17 @@ class PemesananController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function history()
+    {
+        $pemesanan = Pemesanan::with('pertandingan')
+            ->where('user_id', Auth::id())
+            ->get();
+    
+        return response()->json([
+            'message' => 'History berhasil diambil',
+            'data' => $pemesanan
+        ]);
     }
 }
