@@ -48,15 +48,17 @@ export default function DatPelangganPage() {
 
     // Get data
     useEffect(() => {
+        const token = localStorage.getItem("token");
         fetch("http://localhost:8000/api/pemesanan", {
             method: "Get",
             headers: {
                 "Content-type": "Application/json",
+                Authorization: `Bearer ${token}`, 
             },
         })
             .then((response) => {
                 if (!response.ok) {
-                    throw new Error("Failed to fetch datapemesanan");
+                    throw new Error("Data Tidak Tersedia datapemesanan");
                 }
                 return response.json();
             })

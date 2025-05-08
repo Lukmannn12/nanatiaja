@@ -114,4 +114,16 @@ class PemesananController extends Controller
             'data' => $pemesanan
         ]);
     }
+
+    public function countpemesanan()
+    {
+
+        $total = Pemesanan::count();
+
+        return response()->json([
+            'meesage' => "total pemesanan",
+            "total" => $total
+        ], 200);
+    }
+
 }

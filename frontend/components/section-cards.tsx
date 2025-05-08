@@ -18,6 +18,7 @@ export function SectionCards() {
 
   const [totalPertandingan, setTotalPertandingan] = useState<number | null>(null);
   const [totalJadwal, setTotalJadwal] = useState<number | null>(null);
+  const [totalPemesanan, setTotalPemesanan] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchTotalJadwal = async () => {
@@ -34,6 +35,25 @@ export function SectionCards() {
     }
 
     fetchTotalJadwal()
+}, [])
+
+useEffect(() => {
+  const token = localStorage.getItem("token");
+  const fetchTotalPemesanan = async () => {
+    try {
+      const res = await axios.get("http://localhost:8000/api/countpemesanan", {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`, 
+        },
+      })
+      setTotalPemesanan(res.data.total)
+    } catch (error) {
+      console.error("gagal mengambil total pemesanan:", error)
+    }
+  }
+
+  fetchTotalPemesanan()
 }, [])
 
   useEffect(() => {
@@ -69,6 +89,14 @@ export function SectionCards() {
           <CardDescription>Total Jadwal</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
            {totalJadwal}
+          </CardTitle>
+        </CardHeader>
+      </Card>
+      <Card className="@container/card">
+        <CardHeader>
+          <CardDescription>Total Pemesanan</CardDescription>
+          <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+           {totalPemesanan}
           </CardTitle>
         </CardHeader>
       </Card>

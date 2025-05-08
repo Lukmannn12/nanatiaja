@@ -52,12 +52,15 @@ export default function EditDatapelangganPage({ pelangganData }: any) {
         e.preventDefault();
         
     try {
+        const token = localStorage.getItem("token");
         const res = await axios.put(
+            
             `http://127.0.0.1:8000/api/pemesanan/${pelanggan.id}`,
             pelanggan,
             {
               headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`, 
               },
             }
           );
